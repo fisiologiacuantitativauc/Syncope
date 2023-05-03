@@ -1,0 +1,261 @@
+function COH_D
+%% Coherence
+
+%BL
+HF= 15:84; %30:84
+%HF= 15:176;
+LF= 85:176;%137 176
+signif_HF = zeros(8,5);
+
+carpetas= ["baseline","hut20","hut"];%hut es hut45
+for l=1:3
+    nombres= dir(strcat("Resultados_wpco/",carpetas(l)));
+    nombres= {nombres.name};
+    nombres= nombres(3:end);
+
+    vector_s= logical(nombrTT(nombres,1));
+    vector_n= logical(nombrTT(nombres,2));
+
+S1H=[];
+S1L=[];
+for i=1:length(nombres)
+load(nombres{i})
+
+% HF= 15:84; %30:84
+% LF= 85:137;%137 176
+
+sH  = mean(lim(HF,:),1,"omitnan"); %35:84  16:84,
+sL  = mean(lim(LF,:),1,"omitnan");%85:128 85:end
+
+S1H      = [S1H; sH];
+S1L      = [S1L; sL];
+
+end
+control=[];
+sincope=[]; %Seleccionar sujetos con sincope y sujetos control
+
+control(:,:,1)= S1H(vector_n,:);
+control(:,:,2)= S1L(vector_n,:);
+
+sincope(:,:,1)= S1H(vector_s,:);
+sincope(:,:,2)= S1L(vector_s,:);
+
+
+
+% guardar estadisticos en nueva array
+if l==1
+V1=control;
+V2=sincope;
+elseif l==2
+V3=control;
+V4=sincope;
+elseif l==3
+V5=control;
+V6=sincope; 
+end
+% V3= iqr(control,1);
+% V4=iqr(sincope,1);
+end
+
+% p(1,i)= ranksum(Pw(control,i),Pw(sincope,i));
+%% 70
+nombres= dir(strcat("Resultados_wpco/hut70"));
+nombres= {nombres.name};
+nombres= nombres(3:end);
+ventanas= ["tempranaA","tempranaB","tardiaA","tardiaB","sincope"];
+for l= 1:length(ventanas)
+nombres_i= nombres(contains(nombres,ventanas(l)));
+    vector_s= logical(nombrTT(nombres_i,1));
+    vector_n= logical(nombrTT(nombres_i,2));
+
+S1H=[];
+S1L=[];
+for i=1:length(nombres_i)
+load(nombres_i{i})
+
+% HF= 15:84; %30:84
+% LF= 85:176;%137
+
+sH  = mean(lim(HF,:),1,"omitnan"); %35:84  16:84,
+sL  = mean(lim(LF,:),1,"omitnan");%85:128 85:end
+
+S1H      = [S1H; sH];
+S1L      = [S1L; sL];
+end
+
+control=[];
+sincope=[];
+
+control(:,:,1)= S1H(vector_n,:);
+control(:,:,2)= S1L(vector_n,:);
+
+sincope(:,:,1)= S1H(vector_s,:);
+sincope(:,:,2)= S1L(vector_s,:);
+
+
+% guardar estadisticos en nueva array
+if l==1
+V7=control;
+V8=sincope;
+% V3= iqr(control,1);
+% V4=iqr(sincope,1);
+elseif l==2
+V9=control;
+V10=sincope;    
+elseif l==3
+V11=control;
+V12=sincope; 
+elseif l==4
+V13=control;
+V14=sincope;  
+elseif l==5
+V15=control;
+V16=sincope; 
+end
+
+end
+
+
+
+%% DB
+HF= 35:84; %30:84
+LF= 85:176;%137 176
+% signif_HF = zeros(8,5);
+
+    nombres= dir("Deep_Breathing\WPCOR");
+    nombres= {nombres.name};
+    nombres= nombres(3:end);
+
+    vector_s= logical(nombrTT(nombres,1));
+    vector_n= logical(nombrTT(nombres,2));
+%     vector_n([4,18,21])= logical(0);
+%     vector_s([12,22])= logical(0);
+
+
+S1H=[];
+S1L=[];
+for i=1:length(nombres)
+   
+load(nombres{i})
+
+% HF= 15:84; %30:84
+% LF= 85:137;%137 176
+
+try
+sH  = mean(lim(HF,:),1,"omitnan"); %35:84  16:84,
+sL  = mean(lim(LF,:),1,"omitnan");%85:128 85:end
+catch
+end
+
+S1H      = [S1H; sH];
+S1L      = [S1L; sL];
+
+end
+control=[];
+sincope=[]; %Seleccionar sujetos con sincope y sujetos control
+
+control(:,:,1)= S1H(vector_n,:);
+control(:,:,2)= S1L(vector_n,:);
+
+sincope(:,:,1)= S1H(vector_s,:);
+sincope(:,:,2)= S1L(vector_s,:);
+
+V17=control;
+V18=sincope;
+
+
+
+
+%HG
+HF= 35:84; %30:84
+LF= 85:137;%137 176
+% signif_HF = zeros(8,5);
+
+    nombres= dir("Handgrip\WPCOR");
+    nombres= {nombres.name};
+    nombres= nombres(3:end);
+
+    vector_s= logical(nombrTT(nombres,1));
+    vector_n= logical(nombrTT(nombres,2));
+%     vector_n([13,12])= logical(0);
+%     vector_s([13])= logical(1);
+
+
+S1H=[];
+S1L=[];
+for i=1:length(nombres)
+   
+load(nombres{i})
+
+% HF= 15:84; %30:84
+% LF= 85:137;%137 176
+
+try
+sH  = mean(lim(HF,:),1,"omitnan"); %35:84  16:84,
+sL  = mean(lim(LF,:),1,"omitnan");%85:128 85:end
+catch
+end
+
+S1H      = [S1H; sH];
+S1L      = [S1L; sL];
+
+end
+control=[];
+sincope=[]; %Seleccionar sujetos con sincope y sujetos control
+
+control(:,:,1)= S1H(vector_n,:);
+control(:,:,2)= S1L(vector_n,:);
+
+sincope(:,:,1)= S1H(vector_s,:);
+sincope(:,:,2)= S1L(vector_s,:);
+
+V19=control;
+V20=sincope;
+% V3= iqr(control,1);
+% V4=iqr(sincope,1);
+
+%% Tets  BL con DB, HG, TT20,TT45
+% Control  BL con DB, HG, TT20,TT45
+for j= 1:2  %1: HF 2: LF
+    for l =1:5
+matrix=padcat(V1(:,l,j),V3(:,l,j),V5(:,l,j),V17(:,l,j),V19(:,l,j));%...
+    %Pw6(1,control6)',Pw6(2,control6)',Pw6(3,control6)',Pw6(4,control6)',Pw6(5,control6)');
+
+[pe,tbl,stats]= kruskalwallis(matrix,{'BL','TT20','TT45','DB','HG'},'on');
+[c,m,h,nms] = multcompare(stats,'CType','dunn-sidak','Display','on' );
+
+%Syncope  BL con DB, HG, TT20,TT45
+matrix=padcat(V2(:,l,j),V4(:,l,j),V6(:,l,j),V18(:,l,j),V20(:,l,j));%...
+    %Pw6(1,control6)',Pw6(2,control6)',Pw6(3,control6)',Pw6(4,control6)',Pw6(5,control6)');
+
+[pe,tbl,stats]= kruskalwallis(matrix,{'BL','TT20','TT45','DB','HG'},'on');
+[c,m,h,nms] = multcompare(stats,'CType','dunn-sidak','Display','on' );
+
+
+% Control  BL con HUT70
+matrix=padcat(V1(:,l,j),V7(:,l,j),V9(:,l,j),V11(:,l,j),V13(:,l,j),V15(:,l,j));%...
+    %Pw6(1,control6)',Pw6(2,control6)',Pw6(3,control6)',Pw6(4,control6)',Pw6(5,control6)');
+
+[pe,tbl,stats]= kruskalwallis(matrix,{'BL','-20','-15','-10','-5','S'},'on');
+[c,m,h,nms] = multcompare(stats,'CType','dunn-sidak','Display','on' );
+
+% Syncope  BL con HUT70
+matrix=padcat(V2(:,l,j),V8(:,l,j),V10(:,l,j),V12(:,l,j),V14(:,l,j),V16(:,l,j));%...
+    %Pw6(1,control6)',Pw6(2,control6)',Pw6(3,control6)',Pw6(4,control6)',Pw6(5,control6)');
+
+[pe,tbl,stats]= kruskalwallis(matrix,{'BL','-20','-15','-10','-5','S'},'on');
+[c,m,h,nms] = multcompare(stats,'CType','dunn-sidak','Display','on' );
+
+
+
+    end
+end
+T=[];
+for i= 1:5
+    Tc= median(V1(:,i,2));
+    Ts= median(V2(:,i,2));
+    ta= [Tc,Ts];
+    
+end
+
+
