@@ -1,0 +1,111 @@
+function WFCO
+
+labels= ["baseline","hut","hut70"];
+for n= 3:numel(labels)
+nam=dir(strcat("Prepro_",labels(n)));
+names= {nam.name};
+names= names(3:end);
+plotea= 1;
+
+    if n==1 | n==2 % baseline y hut 20-45
+for i=3:numel(names)
+    if contains(names{i},"TT70")
+        continue
+    end
+    data = load(names{i});
+    name =erase(names{i},'baseline.mat') ;
+
+   
+    RR_s       =data.RR_s;
+    SBP_s      =data.SBP_s;
+    DBP_s      =data.DBP_s;
+    respsignal = data.respsignal_s;
+
+
+
+[choeren1,lim1,fig1,fr1]   = Synchro(RR_s,SBP_s,5,'RR','SBP',name,plotea); %HF
+
+[choeren2,lim2,fig2,fr2]   = Synchro(RR_s,DBP_s,5,'RR','DBP',name,plotea);
+[choeren3,lim3,fig3,fr3]   = Synchro(RR_s,respsignal,5,'RR','RESP',name,plotea);
+[choeren4,lim4,fig4,fr4]   = Synchro(SBP_s,respsignal,5,'SBP','RESP',name,plotea);
+[choeren5,lim5,fig5,fr5]   = Synchro(DBP_s,respsignal,5,'DBP','RESP',name,plotea); 
+
+lim            = padcat(lim1,lim2,lim3,lim4,lim5);
+frecuencia_w   = padcat(fr1,fr2,fr3,fr4,fr5);
+Phase_cohe     = padcat(choeren1,choeren2,choeren3,choeren4,choeren5);
+
+if plotea == 1
+
+    if n==1
+        cd Coherence_figu/baseline
+    elseif n==2 
+        cd Coherence_figu/hut
+    end
+
+for l=1:5
+    exportgraphics(eval(strcat('fig',string(l))), strcat(erase(names{i},'.mat'),'.pdf'), 'Append', true);
+end
+cd ..
+cd ..
+end
+
+carpeta =strcat("Resultados_wpco\",labels(n));
+cd(carpeta)
+save(strcat(labels(n),'_',erase(names{i},'baseline.mat')), 'lim','Phase_cohe',"frecuencia_w" )
+cd ..
+cd ..
+if labels== "baseline"
+carpeta =strcat("Baseline\WPCOR",labels(n));
+cd(carpeta)
+save(strcat(labels(n),'_',erase(names{i},'baseline.mat')), 'lim','Phase_cohe',"frecuencia_w" )
+cd ..
+cd ..
+end
+end
+    else % Ventanas hut 70
+    ventanas=["tempranaA","tempranaB","tardiaA","tardiaB","sincope"];
+    for i=1:numel(names)
+        for l= 1: numel(ventanas)
+    data = load(names{i});
+    name =erase(names{i},'baseline.mat') ;
+    RR_s       =data.windows.RR_s.(ventanas(l));
+    SBP_s      =data.windows.SBP_s.(ventanas(l));
+    DBP_s      =data.windows.DBP_s.(ventanas(l));
+    respsignal = data.windows.respsignal_s.(ventanas(l));
+
+    if isempty(RR_s)
+        continue
+    end
+
+    [choeren1,lim1,fig1,fr1]   = Synchro(RR_s,SBP_s,5,'RR','SBP',name,plotea); %HF
+    [choeren2,lim2,fig2,fr2]   = Synchro(RR_s,DBP_s,5,'RR','DBP',name,plotea);
+    [choeren3,lim3,fig3,fr3]   = Synchro(RR_s,respsignal,5,'RR','RESP',name,plotea);
+    [choeren4,lim4,fig4,fr4]   = Synchro(SBP_s,respsignal,5,'SBP','RESP',name,plotea);
+    [choeren5,lim5,fig5,fr5]   = Synchro(DBP_s,respsignal,5,'DBP','RESP',name,plotea); 
+   
+    lim            = padcat(lim1,lim2,lim3,lim4,lim5);
+frecuencia_w   = padcat(fr1,fr2,fr3,fr4,fr5);
+Phase_cohe     = padcat(choeren1,choeren2,choeren3,choeren4,choeren5);
+
+    if plotea == 1
+cd Coherence_figu/hut_70
+    for v=1:5
+    exportgraphics(eval(strcat('fig',string(v))), strcat(erase(names{i},'.mat'),'.pdf'), 'Append', true);
+    end
+cd ..
+cd ..
+    end
+
+carpeta =strcat("Resultados_wpco\",labels(n));
+cd(carpeta)
+save(strcat(labels(n),'_',erase(names{i},'window.mat'),"_",ventanas(l)), 'lim','Phase_cohe',"frecuencia_w" )
+cd ..
+cd ..
+name
+        end
+        end
+    end
+
+
+
+end
